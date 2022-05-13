@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react'
 import {
   Button,
   FlatList,
@@ -6,15 +6,27 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { LANGUAGE } from "@env";
+} from 'react-native'
+import { 
+  PROTOCOL,
+  BASE_URL,
+  UNITS,
+  CNT,
+  LANGUAGE,
+  APPID
+} from '@env'
 
 export default function App() {
   const [cidade, setCidade] = useState("")
   const [previsoes, setPrevisoes] = useState([])
   const capturarCidade = (cidadeDigitada) => {
     setCidade(cidadeDigitada);
-  };
+  }
+
+const obterPrevisoes = () => {
+  const url =encodeURI(`${PROTOCOL}://${BASE_URL}?units=${UNITS}&cnt=${CNT}&lang=${LANGUAGE}&appid=${APPID}&q=${cidade}`)
+  console.log(url)
+}   
   return (
     <View style={styles.container}>
       <View style={styles.cidadeView}>
@@ -25,10 +37,20 @@ export default function App() {
           value={cidade}
           onChangeText={capturarCidade}
         />
-        <Button title="OK" />
+        <Button title="OK" 
+        onPress={obterPrevisoes}
+        />
       </View>
       {/* Exibição das previsões */}
-      <FlatList />
+      <FlatList
+      data={previsoes}
+      renderItem={
+        p => (
+          <Text>{JSON.stringify(p)}</Text>
+
+        )
+      }
+      />
     </View>
   );
 }
